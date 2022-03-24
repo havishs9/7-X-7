@@ -1,0 +1,252 @@
+import pygame
+import colorama
+import sys
+import random
+from colorama import Fore, Back, Style
+from pygame import mixer
+import time
+
+pygame.init()
+colorama.init()
+print(
+    f"{Fore.RED}Splitting your screen with the Console and the Pygame Window is recommended. Having your audio turned on is also recommended for sound effects")
+print('\n' * 5)
+screen = pygame.display.set_mode([1100,1100])
+pygame.display.set_caption('7X7')
+print(
+    f"{Fore.GREEN}Fun fact: {Fore.BLUE}Bubble wrap popping is one of the best games you can play to {Fore.RED}relieve stress. {Fore.BLUE}Stress is one of the biggest mental health issues that teenagers struggle with.{Fore.RESET}")
+print()
+
+present = (f"{Fore.GREEN}To help solve this problem, I present {Fore.CYAN}7 X 7{Fore.RESET}")
+print(present)
+
+tut_r, tut_g, tut_b = 0, 191, 255
+
+
+def tutorial():
+    print(('\n' * 30) + (f"{Fore.GREEN}TUTORIAL"))
+    print()
+    print(
+        f"{Fore.CYAN}7 x 7 is a game designed to mimic the feel of popping bubble wraps.")
+    print(f"{Fore.RED}Objective: Pop all of the bubbles on the 7 by 7 array of bubbles. Time will be recorded.")
+    print(f"{Fore.MAGENTA}Popping: Click any key to pop the bubbles.")
+    print(f"{Fore.BLUE}After clearing all the bubbles, press any key to stop timer.{Fore.RESET}")
+    print(f"{Fore.YELLOW}Remember: this game is designed to help you relax ☻{Fore.RESET}")
+
+
+def gameplay():
+    screen.fill((0, 0, 0))
+    pygame.draw.line(screen, (255, 0, 0), (250, 50), (250, 750), 5)
+    pygame.draw.line(screen, (255, 0, 0), (250, 750), (900, 750), 5)
+    pygame.draw.line(screen, (255, 0, 0), (900, 750), (900, 50), 5)
+    pygame.draw.line(screen, (255, 0, 0), (900, 50), (250, 50), 5)
+    start_font = pygame.font.SysFont('arial', 35)
+
+    start_game = start_font.render('START', True, (0, 255, 0))
+    colors = []
+    for i in range(49):
+
+
+        color = (115, 222, 230)
+
+        colors.append(color)
+
+    start_but = pygame.Rect(510, 75, 135, 35)
+    # pygame.draw.rect(screen,(8 , 51, 25),start_but)
+    # screen.blit(start_game ,(525,75))
+    menu_font = pygame.font.SysFont('arial', 25)
+    menu = menu_font.render('MAIN MENU', True, (0, 0, 0))
+
+    menu_rect = pygame.Rect(0, 0, 150, 30)
+    pygame.draw.rect(screen, (255, 111, 0), menu_rect)
+    screen.blit(menu, (0, 0))
+
+    #### TUTORIAL
+    quit_font = pygame.font.SysFont('arial', 25)
+    quit= quit_font.render('QUIT', True, (255, 0, 255))
+    quit_rect = pygame.Rect(0, 100, 150, 30)
+    pygame.draw.rect(screen,(231, 188, 232),quit_rect)
+    screen.blit(quit,(0,100))
+
+    tut_font = pygame.font.SysFont('arial', 25)
+    tut = tut_font.render('TUTORIAL', True, (0, 0, 255))
+    tut_rect = pygame.Rect(0, 50, 150, 30)
+
+    pygame.draw.rect(screen, (tut_r, tut_g, tut_b), tut_rect)
+    screen.blit(tut, (0, 50))
+    score = 0
+    xpos = 350
+    ypos = 150
+    color_index = random.randint(1, 48)
+    pause = False
+    newx = 350
+    newy = 150
+    start_time = pygame.time.get_ticks()
+    size = 25
+    once = True
+    correct = (220, 130, 245)
+    while xpos != 875 and ypos != 675:
+
+        pos1, pos2 = pygame.mouse.get_pos()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                break
+                # and screen.get_at((pos1,pos2)) == (159, 206, 207):
+            if e.type == pygame.KEYDOWN and xpos != 875 and ypos != 675:
+                pop = mixer.Sound('pop.wav')
+                pop.play()
+                score += 1
+
+                pygame.draw.circle(screen,correct,(newx,newy),35)
+
+                newx+=75
+                if newx == 875:
+                    newx = 350
+                    newy += 75
+                if newy == 675:
+                    correct = (0,0,0)
+
+
+            if score == 49:
+                correct = (0,0,0)
+                screen.fill((0,0,0))
+                win = pygame.font.SysFont('arial', 50)
+                good_job = win.render('COMPLETED IN', True, (0, 0, 255))
+
+                complete = mixer.Sound('completev1.wav')
+                complete.play()
+                screen.blit(good_job ,  (340,300))
+                end_time = pygame.time.get_ticks()
+                final_time = (end_time - start_time)/1000
+                time = win.render(str(final_time), True, (0, 0, 255))
+                screen.blit(time, (330,400))
+                seconds = win.render('SECONDS!', True, (0, 0, 255))
+                screen.blit(seconds,(490,400))
+                menu_font = pygame.font.SysFont('arial', 25)
+                menu = menu_font.render('MAIN MENU', True, (0, 0, 0))
+                menu_rect = pygame.Rect(0, 0, 150, 30)
+                pygame.draw.rect(screen, (255, 111, 0), menu_rect)
+                screen.blit(menu, (0, 0))
+
+                #### TUTORIAL
+                quit_font = pygame.font.SysFont('arial', 25)
+                quit = quit_font.render('QUIT', True, (255, 0, 255))
+                quit_rect = pygame.Rect(0, 100, 150, 30)
+                pygame.draw.rect(screen, (231, 188, 232), quit_rect)
+                screen.blit(quit, (0, 100))
+
+                tut_font = pygame.font.SysFont('arial', 25)
+                tut = tut_font.render('TUTORIAL', True, (0, 0, 255))
+                tut_rect = pygame.Rect(0, 50, 150, 30)
+
+                pygame.draw.rect(screen, (tut_r, tut_g, tut_b), tut_rect)
+                screen.blit(tut, (0, 50))
+
+
+
+                menu_font = pygame.font.SysFont('arial', 25)
+                menu = menu_font.render('MAIN MENU', True, (0, 0, 0))
+
+                menu_rect = pygame.Rect(0, 0, 150, 30)
+                pygame.draw.rect(screen, (255, 111, 0), menu_rect)
+                screen.blit(menu, (0, 0))
+                correct = (0,0,0)
+                #colors = []
+                #for i in range(49):
+                    #colors += (0,0,0)
+                size = 0
+
+            if e.type == pygame.MOUSEBUTTONDOWN and pos1 > 0 and pos1 < 150 and pos2 > 0 and pos2 < 30:
+                screen.fill((0, 0, 0))
+
+                MainMenu()
+                pygame.display.flip()
+
+            if e.type == pygame.MOUSEBUTTONDOWN and pos1 > 0 and pos1 < 150 and pos2 > 50 and pos2 < 80:
+                tutorial()
+            #quit_rect = pygame.Rect(0, 100, 150, 30)
+            if e.type == pygame.MOUSEBUTTONDOWN and pos1 > 0 and pos1 < 150 and pos2 > 100 and pos2 < 130:
+                sys.exit()
+
+            if once:
+                pygame.draw.circle(screen, (colors[color_index]), (xpos, ypos), size)
+
+            xpos += 75
+            if xpos == 875:
+                ypos += 75
+                xpos = 350
+            if ypos == 675:
+                xpos = 350
+                ypos = 150
+            if xpos == 875 and ypos == 675:
+                once = False
+
+
+            pygame.display.flip()
+
+
+# ________AUDIO_______
+# play = audio.play_file('pop.mp3')
+# ---------------------------------------------------------------------------------LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP----------------------------------------------------------------------------------------------------------
+
+def MainMenu():
+    run = True
+    tut_r, tut_g, tut_b = 0, 191, 255
+    start_r, start_g, start_b = 8, 51, 25
+    # TITLE
+    title_font = pygame.font.SysFont('arial', 50)
+    # 8, 51, 25, 255
+    x = title_font.render('7    7', True, (0, 0, 255))
+    x1 = title_font.render('   X  ', True, (255, 0, 0))
+
+    screen.blit(x, (500, 0))
+    screen.blit(x1, (499, 0))
+
+    # PLAY BUTTON
+
+    smallfont = pygame.font.SysFont('arial', 35)
+    text = smallfont.render('PLAY', True, (0, 255, 0))
+    start = pygame.Rect(500, 150, 125, 40)
+    pygame.draw.rect(screen, (start_r, start_g, start_b), start)
+    screen.blit(text, (518, 150))
+
+    # Tutorial Button
+
+    tut_font = pygame.font.SysFont('arial', 35)
+    tut = tut_font.render('TUTORIAL', True, (0, 0, 255))
+    tut_rect = pygame.Rect(475, 250, 175, 40)
+
+    pygame.draw.rect(screen, (tut_r, tut_g, tut_b), tut_rect)
+    screen.blit(tut, (475, 250))
+
+    # Made with love
+
+    cred = tut_font.render('Made with ♥ by Havish S.', True, (255, 102, 0))
+    screen.blit(cred, (350, 800))
+
+    while run:
+        x, y = pygame.mouse.get_pos()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                run = False
+            # START FUNCTION
+            if e.type == pygame.MOUSEBUTTONDOWN and x > 490 and x < 640 and y > 125 and y < 190:
+                start_r, start_g, start_b = 255, 255, 255
+                gameplay()
+
+            # Tutorial Function:
+            if e.type == pygame.MOUSEBUTTONDOWN and x > 470 and x < 720 and y > 200 and y < 290:
+                tutorial()
+
+                # tut_rect = pygame.Rect(470,250,175,40)
+
+        pygame.display.flip()
+
+
+MainMenu()
+
+
+
+
+
+
